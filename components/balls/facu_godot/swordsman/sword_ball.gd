@@ -15,7 +15,7 @@ func ball_physics_process(delta : float):
 	for body in sword.get_overlapping_bodies():
 		if body is Ball and body != self:
 			attack(body,floor(damage))
-			damage *= 1.1
+			damage *= 1.25
 
 
 func _on_dash_timer_timeout() -> void:

@@ -19,9 +19,13 @@ func ball_physics_process(delta : float):
 	
 	for i in get_colliding_bodies():
 		if i is Ball and attack_timer.is_stopped():
-			if i.original != original:
+			if i.ball_name == "Duplicator":
+				if i.original != original:
+					attack(i,1)
+					attack_timer.start()
+			else:
 				attack(i,1)
-				attack_timer.start() 
+				attack_timer.start()
 	
 	balls = 0
 	for i in get_parent().get_children():

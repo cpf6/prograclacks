@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://c6pdv3gvq6dcp"]
+[gd_scene format=3 uid="uid://vuugumo1llby"]
 
-[ext_resource type="Texture2D" uid="uid://ekisdenueh13" path="res://assets/textures/circle.svg" id="1_bwn8d"]
-[ext_resource type="Script" uid="uid://m3vksq0qudx7" path="res://components/ball.gd" id="1_ttb20"]
-[ext_resource type="FontFile" uid="uid://cy7irh352x1gb" path="res://assets/fonts/Anton-Regular.ttf" id="2_ttb20"]
-[ext_resource type="AudioStream" uid="uid://cms53kqductr2" path="res://assets/audio/clack.ogg" id="3_cfbba"]
+[ext_resource type="Script" uid="uid://hi5ejkr3sew6" path="res://components/balls/facu_godot/bala_ball_incompleto/sword_balll.gd" id="1_sx6mf"]
+[ext_resource type="PackedScene" uid="uid://dwrstaogxatua" path="res://components/balls/facu_godot/bala_ball_incompleto/bala.tscn" id="2_um187"]
+[ext_resource type="Texture2D" uid="uid://ekisdenueh13" path="res://assets/textures/circle.svg" id="2_umbgy"]
+[ext_resource type="FontFile" uid="uid://cy7irh352x1gb" path="res://assets/fonts/Anton-Regular.ttf" id="3_w4t4q"]
+[ext_resource type="AudioStream" uid="uid://cms53kqductr2" path="res://assets/audio/clack.ogg" id="4_aojht"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eb21c"]
 bounce = 1.0
@@ -12,21 +13,25 @@ bounce = 1.0
 radius = 66.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_eb21c"]
-font = ExtResource("2_ttb20")
+font = ExtResource("3_w4t4q")
 font_size = 48
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Ball" type="RigidBody2D" unique_id=1750905078 node_paths=PackedStringArray("sprite", "collision_shape", "attack_timer", "clack_sound", "label")]
+[node name="Ball" type="RigidBody2D" unique_id=1750905078 node_paths=PackedStringArray("espada", "area_espada", "elements", "sprite", "collision_shape", "attack_timer", "clack_sound", "label")]
 process_mode = 1
+position = Vector2(954, 404)
 physics_material_override = SubResource("PhysicsMaterial_eb21c")
+gravity_scale = 0.0
 lock_rotation = true
 continuous_cd = 2
 contact_monitor = true
 max_contacts_reported = 1
-script = ExtResource("1_ttb20")
-size = 0.5
-color = Color(0.8641473, 5.506158e-05, 0.6555127, 1)
+script = ExtResource("1_sx6mf")
+espada = NodePath("")
+area_espada = NodePath("")
+bala_escena = ExtResource("2_um187")
+elements = NodePath("Elements")
 sprite = NodePath("Sprite")
 collision_shape = NodePath("CollisionShape2D")
 attack_timer = NodePath("AttackTimer")
@@ -35,13 +40,13 @@ label = NodePath("CenterContainer/Label")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=555754557]
 modulate = Color(0.8, 0.8, 0.8, 1)
-texture = ExtResource("1_bwn8d")
+texture = ExtResource("2_umbgy")
 
 [node name="Borde" type="Sprite2D" parent="Sprite" unique_id=1785010644]
 modulate = Color(0, 0, 0, 1)
 show_behind_parent = true
 scale = Vector2(1.025, 1.025)
-texture = ExtResource("1_bwn8d")
+texture = ExtResource("2_umbgy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=441636763]
 shape = SubResource("CircleShape2D_eb21c")
@@ -72,6 +77,16 @@ wait_time = 0.25
 one_shot = true
 
 [node name="ClackSound" type="AudioStreamPlayer2D" parent="." unique_id=359446657]
-stream = ExtResource("3_cfbba")
+stream = ExtResource("4_aojht")
 
 [node name="Elements" type="Node2D" parent="." unique_id=1602007940]
+
+[node name="DashTimer" type="Timer" parent="." unique_id=485811135]
+autostart = true
+
+[node name="DisparoTimer" type="Timer" parent="." unique_id=151356089]
+wait_time = 2.0
+autostart = true
+
+[connection signal="timeout" from="DashTimer" to="." method="dash"]
+[connection signal="timeout" from="DisparoTimer" to="." method="disparar"]

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dwrstaogxatua"]
+
+[ext_resource type="Texture2D" uid="uid://d25s2vafj8u4t" path="res://icon.svg" id="1_lig8q"]
+[ext_resource type="Script" uid="uid://cwg85elrllhyp" path="res://components/balls/facu_godot/bala_ball_incompleto/bala.gd" id="1_mhmrx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lig8q"]
+size = Vector2(64, 64)
+
+[node name="Bala" type="Area2D" unique_id=75707660]
+script = ExtResource("1_mhmrx")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1973128633]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_lig8q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1706763261]
+shape = SubResource("RectangleShape2D_lig8q")
