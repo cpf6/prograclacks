@@ -1,0 +1,142 @@
+[gd_scene format=3 uid="uid://74s28ouqrjpk"]
+
+[ext_resource type="Script" uid="uid://cmpgy14ch4td2" path="res://components/balls/caro/iman_ball/iman_ball.gd" id="1_n16q3"]
+[ext_resource type="Texture2D" uid="uid://ekisdenueh13" path="res://assets/textures/circle.svg" id="3_ocnmy"]
+[ext_resource type="FontFile" uid="uid://cy7irh352x1gb" path="res://assets/fonts/Anton-Regular.ttf" id="4_io2q4"]
+[ext_resource type="AudioStream" uid="uid://cms53kqductr2" path="res://assets/audio/clack.ogg" id="5_5tivh"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eb21c"]
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_eb21c"]
+radius = 66.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_eb21c"]
+font = ExtResource("4_io2q4")
+font_size = 48
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_n16q3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.8, 0.8, 0.8, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2qeph"]
+resource_name = "atraer"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.8, 0.8, 0.8, 1), Color(0.3, 0.5, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_h6uqo"]
+resource_name = "repeler"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.8, 0.8, 0.8, 1), Color(1, 0.55, 0.1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h6uqo"]
+_data = {
+&"RESET": SubResource("Animation_n16q3"),
+&"atraer": SubResource("Animation_2qeph"),
+&"repeler": SubResource("Animation_h6uqo")
+}
+
+[node name="Ball" type="RigidBody2D" unique_id=1750905078 node_paths=PackedStringArray("elements", "sprite", "collision_shape", "attack_timer", "clack_sound", "label")]
+process_mode = 1
+physics_material_override = SubResource("PhysicsMaterial_eb21c")
+gravity_scale = 0.0
+lock_rotation = true
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_n16q3")
+ball_name = "Imantzion"
+elements = NodePath("Elements")
+sprite = NodePath("Sprite")
+collision_shape = NodePath("CollisionShape2D")
+attack_timer = NodePath("AttackTimer")
+clack_sound = NodePath("ClackSound")
+label = NodePath("CenterContainer/Label")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=555754557]
+modulate = Color(0.8, 0.8, 0.8, 1)
+texture = ExtResource("3_ocnmy")
+
+[node name="Borde" type="Sprite2D" parent="Sprite" unique_id=1785010644]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+scale = Vector2(1.025, 1.025)
+texture = ExtResource("3_ocnmy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=441636763]
+shape = SubResource("CircleShape2D_eb21c")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=513371093]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -23.5
+offset_top = -36.5
+offset_right = 23.5
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CenterContainer" unique_id=224051280]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_eb21c")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AttackTimer" type="Timer" parent="." unique_id=485766822]
+process_callback = 0
+wait_time = 0.25
+one_shot = true
+
+[node name="ClackSound" type="AudioStreamPlayer2D" parent="." unique_id=359446657]
+stream = ExtResource("5_5tivh")
+
+[node name="Elements" type="Node2D" parent="." unique_id=1602007940]
+
+[node name="ModeTimer" type="Timer" parent="." unique_id=940912015]
+wait_time = 2.5
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1957892290]
+libraries/ = SubResource("AnimationLibrary_h6uqo")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="ModeTimer" to="." method="toggle_mode"]
